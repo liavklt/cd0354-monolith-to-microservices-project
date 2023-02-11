@@ -19,7 +19,14 @@ spec:
         name: backend-feed
         ports:
         - containerPort: 8080
-        imagePullPolicy: Always                  
+        imagePullPolicy: Always
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "2048Mi"
+            cpu: "500m"                  
         envFrom:
           - secretRef:
               name: env-secret
