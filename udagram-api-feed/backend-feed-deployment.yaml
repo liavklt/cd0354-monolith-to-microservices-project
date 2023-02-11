@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    service: backend-feed
+  name: backend-feed
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      service: backend-feed
+  template:
+    metadata:
+      labels:
+        service: backend-feed
+    spec:
+      containers:
+      - image: liavklt/udagram-api-feed:v4
+        name: backend-feed
+        ports:
+        - containerPort: 8080
+        imagePullPolicy: Always                  
+        envFrom:
+          - secretRef:
+              name: env-secret
+              optional: false
+          - configMapRef:
+              name: env-config
+              optional: false      
+        volumeMounts:
+        - name: aws-secret
+          mountPath: "/root/.aws"
+          readOnly: true
+      volumes:
+      - name: aws-secret
+        secret:
+          secretName: aws-secret
